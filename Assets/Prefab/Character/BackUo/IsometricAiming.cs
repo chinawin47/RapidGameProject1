@@ -12,21 +12,18 @@ namespace BarthaSzabolcs.IsometricAiming
         [SerializeField] private LayerMask groundMask;
         [SerializeField] private LayerMask enemyMask;
         [SerializeField] private GameObject projectilePrefab;
+        [SerializeField] private GameObject enemyPrefab;
         [SerializeField] private float projectileSpeed = 10f;
         [SerializeField] private float shootRate = 0.2f;
-        [SerializeField] private int maxAmmo = 6;           // Max bullets before reloading
-        [SerializeField] private float reloadTime = 2f;     // Time it takes to reload
-        [SerializeField] private TextMesh reloadText;       // TextMesh to display reloading message
 
         #endregion
 
         #region Private Fields
 
+        
         private Camera mainCamera;
         private float nextShootTime = 0f;
-        private int currentAmmo;
-        private bool isReloading = false;
-
+        AudioManager audioManager;
         #endregion
 
         #endregion
@@ -34,31 +31,25 @@ namespace BarthaSzabolcs.IsometricAiming
         #region Methods
 
         #region Unity Callbacks
-
+        private void Awake()
+        {
+            audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        }
         private void Start()
         {
             mainCamera = Camera.main;
-            currentAmmo = maxAmmo; // Initialize with full ammo
-            if (reloadText != null)
-                reloadText.gameObject.SetActive(false); // Hide the reload text at the start
+            // StartCoroutine(SpawnEnemies()); // Commented out as respawn is to be removed
         }
 
         private void Update()
         {
-            if (isReloading)
-                return; // Block shooting if reloading
-
-            if (currentAmmo <= 0)
-            {
-                StartCoroutine(Reload()); // Reload when out of ammo
-                return;
-            }
-
             if (Input.GetMouseButton(0) && Time.time >= nextShootTime)
             {
+                audioManager.PlaySFX(audioManager.shoot);
                 Shoot();
                 nextShootTime = Time.time + shootRate;
             }
+            
         }
 
         #endregion
@@ -69,6 +60,7 @@ namespace BarthaSzabolcs.IsometricAiming
             
             if (hitEnemy)
             {
+                audioManager.PlaySFX(audioManager.Hit);
                 Debug.Log("Enemy hit!");
             }
             else
@@ -86,28 +78,7 @@ namespace BarthaSzabolcs.IsometricAiming
                     rb.velocity = direction * projectileSpeed;
                 }
                 Destroy(projectile, 5f);
-
-                currentAmmo--; // Reduce ammo after shooting
-                Debug.Log($"Ammo left: {currentAmmo}");
             }
-        }
-
-        private IEnumerator Reload()
-        {
-            isReloading = true;
-            if (reloadText != null)
-                reloadText.gameObject.SetActive(true); // Show the reload text
-
-            Debug.Log("Reloading...");
-
-            yield return new WaitForSeconds(reloadTime); // Wait for the reload time
-
-            currentAmmo = maxAmmo; // Refill ammo
-            isReloading = false;
-            if (reloadText != null)
-                reloadText.gameObject.SetActive(false); // Hide the reload text
-
-            Debug.Log("Reload complete.");
         }
 
         private (bool hitEnemy, Vector3 position) GetMouseClickTarget()
@@ -126,6 +97,9 @@ namespace BarthaSzabolcs.IsometricAiming
 
             return (hitEnemy: false, position: Vector3.zero);
         }
+
+        // Removed the SpawnEnemies coroutine
+        // Removed the SpawnEnemy method
 
         #endregion
     }
