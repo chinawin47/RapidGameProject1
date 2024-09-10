@@ -13,16 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isShooting = false; // Track if the player is shooting
 
-<<<<<<< HEAD
     
-=======
-    AudioManager audioManager;
-
-    private void Awake()
-    {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-    }
->>>>>>> parent of e794172 (TusUpdate)
 
     // Start is called before the first frame update
     void Start()
@@ -66,16 +57,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
         // Check if the player is shooting
-        
-       
-        
         isShooting = Input.GetMouseButtonDown(0); // Example for left mouse button (replace with your shooting logic)
 
         if (!isShooting) // Only move if the player is not shooting
         {
-            
             float x = Input.GetAxis("Horizontal");
             float y = Input.GetAxis("Vertical");
 
