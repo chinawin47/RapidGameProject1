@@ -9,6 +9,7 @@ TagManager:
   - AimPlane
   - Bullet
   - Banker
+  - Audio
   layers:
   - Default
   - TransparentFX

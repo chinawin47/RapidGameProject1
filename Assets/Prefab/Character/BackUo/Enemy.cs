@@ -17,6 +17,12 @@ public class Enemy : MonoBehaviour
     public GameObject hitEffectPrefab;  // Drag a prefab here in the inspector
 
     public event Action<GameObject> OnEnemyDestroyed; // Event to notify when the enemy is destroyed
+    AudioManager audioManager;
+
+    public void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     private void Start()
     {
@@ -100,6 +106,7 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         // Logic for the enemy dying
+        audioManager.PlaySFX(audioManager.zombiedeath);
         Debug.Log("Enemy has died.");
         Destroy(gameObject);
     }
