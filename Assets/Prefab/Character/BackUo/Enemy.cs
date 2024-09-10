@@ -17,12 +17,6 @@ public class Enemy : MonoBehaviour
     public GameObject hitEffectPrefab;  // Drag a prefab here in the inspector
 
     public event Action<GameObject> OnEnemyDestroyed; // Event to notify when the enemy is destroyed
-    AudioManager audioManager;
-
-    public void Awake()
-    {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-    }
 
     private void Start()
     {
@@ -34,7 +28,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Fence") && !isKnockedBack)
         {
@@ -43,7 +37,7 @@ public class Enemy : MonoBehaviour
 
             if (fence != null)
             {
-                // Damage the fence
+                // Damage the fence continuously while in contact
                 fence.TakeDamage(damageAmount);
                 Debug.Log("Damage dealt to fence: " + damageAmount);
 
@@ -106,7 +100,6 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         // Logic for the enemy dying
-        audioManager.PlaySFX(audioManager.zombiedeath);
         Debug.Log("Enemy has died.");
         Destroy(gameObject);
     }

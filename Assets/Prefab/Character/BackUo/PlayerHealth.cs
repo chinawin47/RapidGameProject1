@@ -6,20 +6,18 @@ public class PlayerHealth : MonoBehaviour
 {
     public int playerHealth = 100; // Starting health for the player
     public int damageAmount = 15;  // Damage taken from collision with enemies
-    AudioManager audioManager;
+    public float damageInterval = 1f; // Time interval between taking damage
 
-    private void Awake()
-    {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-    }
+    private bool canTakeDamage = true; // Control damage interval
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         // Check if the player collides with an enemy
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy") && canTakeDamage)
         {
             // Apply damage to the player
             TakeDamage(damageAmount);
+            StartCoroutine(DamageCooldown()); // Add a cooldown between damage ticks
         }
     }
 
@@ -38,8 +36,14 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         // Logic for the player dying
-        audioManager.PlaySFX(audioManager.death);
         Debug.Log("Player has died.");
         Destroy(gameObject); // Destroy the player GameObject
+    }
+
+    private IEnumerator DamageCooldown()
+    {
+        canTakeDamage = false;
+        yield return new WaitForSeconds(damageInterval); // Wait for the damage interval
+        canTakeDamage = true;
     }
 }
