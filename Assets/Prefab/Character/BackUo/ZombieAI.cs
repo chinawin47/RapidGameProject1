@@ -5,13 +5,14 @@ using UnityEngine.AI;  // Import the NavMesh namespace
 [RequireComponent(typeof(NavMeshAgent))]
 public class ZombieAI : MonoBehaviour
 {
-    public GameObject Target;        // Primary target
-    public GameObject Target2;       // Secondary target
-    public float stopDuration = 1f;  // Time to stop after hitting the fence
-    private bool isStopped = false;  // To track if the zombie is currently stopped
+    public GameObject Target;
+    public GameObject Target2;
+    public float stopDuration = 1f; // Time to stop after hitting the fence
+    private bool isStopped = false; // To track if the zombie is currently stopped
+
     private NavMeshAgent navMeshAgent;
 
-    private void Start()
+    void Start()
     {
         // Get the NavMeshAgent component
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -22,24 +23,20 @@ public class ZombieAI : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
-        // If the agent is stopped, don't set the destination
-        if (isStopped || navMeshAgent == null || !navMeshAgent.isOnNavMesh)
+        if (!isStopped && navMeshAgent != null)
         {
-            return;
-        }
-
-        // Prioritize Target over Target2
-        if (Target != null)
-        {
-            // Set the destination to the primary target's position
-            navMeshAgent.SetDestination(Target.transform.position);
-        }
-        else if (Target2 != null)
-        {
-            // If no primary target, set the destination to the secondary target's position
-            navMeshAgent.SetDestination(Target2.transform.position);
+            if (Target != null)
+            {
+                // Set the destination of the NavMeshAgent to the target's position
+                navMeshAgent.SetDestination(Target.transform.position);
+            }
+           if (Target2 != null)
+            {
+                // Set the destination of the NavMeshAgent to the target's position
+                navMeshAgent.SetDestination(Target2.transform.position);
+            }
         }
     }
 
@@ -47,28 +44,18 @@ public class ZombieAI : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Fence"))
         {
-            // Trigger stop movement when colliding with the fence
             StartCoroutine(StopMovement());
         }
     }
 
     private IEnumerator StopMovement()
     {
-        // Ensure the NavMeshAgent stops movement
-        isStopped = true;
-        if (navMeshAgent.isOnNavMesh)
-        {
-            navMeshAgent.isStopped = true;
-        }
+        isStopped = true; // Stop the zombie from moving
+        navMeshAgent.isStopped = true; // Ensure NavMeshAgent is stopped
 
-        // Wait for the stop duration before resuming movement
-        yield return new WaitForSeconds(stopDuration);
+        yield return new WaitForSeconds(stopDuration); // Wait for the specified duration
 
-        // Resume movement if the NavMeshAgent is on the NavMesh
-        isStopped = false;
-        if (navMeshAgent.isOnNavMesh)
-        {
-            navMeshAgent.isStopped = false;
-        }
+        isStopped = false; // Resume movement
+        navMeshAgent.isStopped = false; // Resume NavMeshAgent
     }
 }
