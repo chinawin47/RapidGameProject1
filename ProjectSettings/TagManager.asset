@@ -9,7 +9,6 @@ TagManager:
   - AimPlane
   - Bullet
   - Banker
-  - Audio
   layers:
   - Default
   - TransparentFX
@@ -22,7 +21,7 @@ TagManager:
   - AimPlane
   - Player
   - Bullet
-  - 
+  - Fance
   - 
   - 
   - 

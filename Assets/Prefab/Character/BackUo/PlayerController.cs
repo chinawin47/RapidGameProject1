@@ -13,8 +13,11 @@ public class PlayerController : MonoBehaviour
 
     private bool isShooting = false; // Track if the player is shooting
 
+<<<<<<< HEAD
     
 
+=======
+>>>>>>> Tungkus
     // Start is called before the first frame update
     void Start()
     {

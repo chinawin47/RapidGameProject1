@@ -15,9 +15,13 @@ public class Enemy : MonoBehaviour
     public AudioSource hitSound;
     public GameObject hitEffectPrefab;
 
+<<<<<<< HEAD
     public event Action<GameObject> OnEnemyDestroyed;
 
     
+=======
+    public event Action<GameObject> OnEnemyDestroyed; // Event to notify when the enemy is destroyed
+>>>>>>> Tungkus
 
     private void Start()
     {
@@ -28,7 +32,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Fence") && !isKnockedBack)
         {
@@ -37,6 +41,10 @@ public class Enemy : MonoBehaviour
 
             if (fence != null)
             {
+<<<<<<< HEAD
+=======
+                // Damage the fence continuously while in contact
+>>>>>>> Tungkus
                 fence.TakeDamage(damageAmount);
                 Debug.Log("Damage dealt to fence: " + damageAmount);
 
@@ -91,6 +99,10 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+<<<<<<< HEAD
+=======
+        // Logic for the enemy dying
+>>>>>>> Tungkus
         Debug.Log("Enemy has died.");
         ScoreManager.scoreValue += 1;
         Destroy(gameObject);
