@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 
     private bool isShooting = false; // Track if the player is shooting
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,5 +77,7 @@ public class PlayerController : MonoBehaviour
                 sr.flipX = false; // Flip sprite to the right
             }
         }
+
+
     }
 }

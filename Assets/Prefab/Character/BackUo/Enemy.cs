@@ -5,22 +5,22 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int damageAmount = 10;
-    public float bounceForce = 5f; // Adjust this value to control the bounce strength
-    public int enemyHealth = 50;   // Enemy health
-    public float knockbackDelay = 0.5f;  // Delay after knockback
+    public float bounceForce = 5f;
+    public int enemyHealth = 50;
+    public float knockbackDelay = 0.5f;
 
-    private bool isKnockedBack = false; // Check if the enemy is knocked back
-    private Rigidbody rb;               // Cache the Rigidbody for efficiency
+    private bool isKnockedBack = false;
+    private Rigidbody rb;
 
-    // Optional: Reference to a sound effect or particle system for hit effects
-    public AudioSource hitSound;        // Drag an AudioSource here in the inspector
-    public GameObject hitEffectPrefab;  // Drag a prefab here in the inspector
+    public AudioSource hitSound;
+    public GameObject hitEffectPrefab;
 
-    public event Action<GameObject> OnEnemyDestroyed; // Event to notify when the enemy is destroyed
+    public event Action<GameObject> OnEnemyDestroyed;
+
+    
 
     private void Start()
     {
-        // Cache the Rigidbody component for efficiency
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
@@ -37,21 +37,16 @@ public class Enemy : MonoBehaviour
 
             if (fence != null)
             {
-                // Damage the fence
                 fence.TakeDamage(damageAmount);
                 Debug.Log("Damage dealt to fence: " + damageAmount);
 
-                // Apply bounce force
                 if (rb != null)
                 {
-                    Vector3 bounceDirection = collision.contacts[0].normal; // Get the collision normal
+                    Vector3 bounceDirection = collision.contacts[0].normal;
                     rb.AddForce(bounceDirection * bounceForce, ForceMode.Impulse);
-
-                    // Start knockback delay
                     StartCoroutine(KnockbackCooldown());
                 }
 
-                // Optionally, play sound or particles on hit
                 PlayHitEffect();
             }
             else
@@ -61,7 +56,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Knockback cooldown coroutine to prevent the enemy from bouncing repeatedly
     private IEnumerator KnockbackCooldown()
     {
         isKnockedBack = true;
@@ -69,7 +63,6 @@ public class Enemy : MonoBehaviour
         isKnockedBack = false;
     }
 
-    // Method to play hit effects (sound, particles, etc.)
     private void PlayHitEffect()
     {
         if (hitSound != null)
@@ -85,7 +78,6 @@ public class Enemy : MonoBehaviour
         Debug.Log("Playing hit effect.");
     }
 
-    // Example method to damage the enemy itself
     public void TakeDamage(int damage)
     {
         enemyHealth -= damage;
@@ -99,14 +91,13 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        // Logic for the enemy dying
         Debug.Log("Enemy has died.");
+        ScoreManager.scoreValue += 1;
         Destroy(gameObject);
     }
 
     private void OnDestroy()
     {
-        // Trigger the event when the enemy is destroyed
         OnEnemyDestroyed?.Invoke(gameObject);
     }
 }
