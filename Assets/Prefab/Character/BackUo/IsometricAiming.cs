@@ -23,7 +23,7 @@ namespace BarthaSzabolcs.IsometricAiming
         
         private Camera mainCamera;
         private float nextShootTime = 0f;
-
+        AudioManager audioManager;
         #endregion
 
         #endregion
@@ -31,7 +31,10 @@ namespace BarthaSzabolcs.IsometricAiming
         #region Methods
 
         #region Unity Callbacks
-
+        private void Awake()
+        {
+            audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        }
         private void Start()
         {
             mainCamera = Camera.main;
@@ -42,9 +45,11 @@ namespace BarthaSzabolcs.IsometricAiming
         {
             if (Input.GetMouseButton(0) && Time.time >= nextShootTime)
             {
+                audioManager.PlaySFX(audioManager.shoot);
                 Shoot();
                 nextShootTime = Time.time + shootRate;
             }
+            
         }
 
         #endregion
@@ -55,6 +60,7 @@ namespace BarthaSzabolcs.IsometricAiming
             
             if (hitEnemy)
             {
+                audioManager.PlaySFX(audioManager.Hit);
                 Debug.Log("Enemy hit!");
             }
             else

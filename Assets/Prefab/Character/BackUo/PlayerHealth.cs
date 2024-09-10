@@ -6,6 +6,12 @@ public class PlayerHealth : MonoBehaviour
 {
     public int playerHealth = 100; // Starting health for the player
     public int damageAmount = 15;  // Damage taken from collision with enemies
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -32,6 +38,7 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         // Logic for the player dying
+        audioManager.PlaySFX(audioManager.death);
         Debug.Log("Player has died.");
         Destroy(gameObject); // Destroy the player GameObject
     }

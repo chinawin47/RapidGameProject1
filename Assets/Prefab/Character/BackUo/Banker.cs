@@ -12,6 +12,7 @@ public class Banker : MonoBehaviour
     public int healAmount = 10;  // Amount of health restored
     public float healInterval = 1.0f; // Time between health restoration
     private bool isHealing = false; // Flag to check if healing is active
+    AudioManager audioManager;
 
     void Start()
     {
@@ -33,6 +34,10 @@ public class Banker : MonoBehaviour
         }
         
     }
+    public void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     public void TakeDamage(int amount)
     {
@@ -40,6 +45,7 @@ public class Banker : MonoBehaviour
         if (health <= 0)
         {
             Destroy(gameObject); // Destroy the fence when health is 0 or less
+            audioManager.PlaySFX(audioManager.breakwall);
         }
     }
 
